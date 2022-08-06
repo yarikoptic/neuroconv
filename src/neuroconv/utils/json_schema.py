@@ -99,7 +99,7 @@ def get_schema_from_method_signature(class_method: classmethod, exclude: list = 
             else:
                 raise NotImplementedError(
                     f"The annotation type of '{param}' in function '{class_method}' is not implemented! "
-                    "Please request it to be added at github.com/catalystneuro/nwb-conversion-tools/issues "
+                    "Please request it to be added at github.com/catalystneuro/neuroconv/issues "
                     "or create the json-schema for this method manually."
                 )
             arg_spec = {param_name: dict(type=param_type)}
