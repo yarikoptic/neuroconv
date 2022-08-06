@@ -35,6 +35,7 @@ class BlackrockRecordingExtractorInterface(BaseRecordingExtractorInterface):
     def __init__(
         self,
         file_path: FilePathType,
+        stream_id: Optional[str] = None,
         nsx_override: OptionalFilePathType = None,
         verbose: bool = True,
         spikeextractors_backend: bool = False,
@@ -46,6 +47,7 @@ class BlackrockRecordingExtractorInterface(BaseRecordingExtractorInterface):
         ----------
         file_path : FilePathType
             The path to the Blackrock with suffix being .ns1, .ns2, .ns3, .ns4m .ns4, or .ns6
+        stream_id: str, optional
         spikeextractors_backend : bool
             False by default. When True the interface uses the old extractor from the spikextractors library instead
             of a new spikeinterface object.
@@ -71,7 +73,7 @@ class BlackrockRecordingExtractorInterface(BaseRecordingExtractorInterface):
             self.recording_extractor = OldToNewRecording(oldapi_recording_extractor=self.recording_extractor)
 
         else:
-            super().__init__(file_path=file_path, verbose=verbose)
+            super().__init__(file_path=file_path, stream_id=stream_id, verbose=verbose)
 
     def get_metadata_schema(self):
         metadata_schema = super().get_metadata_schema()

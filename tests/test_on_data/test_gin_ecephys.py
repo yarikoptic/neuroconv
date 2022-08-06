@@ -160,6 +160,17 @@ class TestEcephysNwbConversions(unittest.TestCase):
             )
         )
 
+    parameterized_recording_list.append(
+        param(
+            data_interface=BlackrockRecordingExtractorInterface,
+            interface_kwargs=dict(
+                file_path=str(DATA_PATH / "blackrock" / "blackrock_2_1" / "l101210-001.ns5"),
+                stream_id='2',
+            ),
+            case_name=f"blackrock_ns2_stream",
+        )
+    )
+
     for suffix, spikeextractors_backend in itertools.product(["rhd", "rhs"], [True, False]):
         parameterized_recording_list.append(
             param(
