@@ -6,8 +6,11 @@ Conversion Gallery
 The examples here are guaranteed to be running correctly with our testing suite.
 Their aim is to be a showcase of the library capabilities and to get you to hit the ground running with your own conversion.
 
-Recording
----------
+Extracellular Electrophysiology
+-------------------------------
+
+Voltage traces
+~~~~~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
@@ -22,8 +25,8 @@ Recording
     Spikelgx <conversion_examples_gallery/recording/spikeglx>
     EDF <conversion_examples_gallery/recording/edf>
 
-Sorting
--------
+Sorted spikes
+~~~~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
@@ -34,9 +37,11 @@ Sorting
     Phy <conversion_examples_gallery/sorting/phy>
     Neuralynx <conversion_examples_gallery/sorting/neuralynx>
 
+Optical Physiology
+------------------
 
 Imaging
--------
+~~~~~~~
 
 .. toctree::
     :maxdepth: 1
@@ -46,8 +51,8 @@ Imaging
     Scanbox <conversion_examples_gallery/imaging/scanbox>
     ScanImage <conversion_examples_gallery/imaging/scanimage>
 
-Segmentation
-------------
+Image Segmentation
+~~~~~~~~~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1

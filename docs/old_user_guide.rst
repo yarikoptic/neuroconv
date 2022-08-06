@@ -1,5 +1,6 @@
-User Guide
-==========================
+Getting Started
+===============
+
 
 NWB files often combine data from multiple sources- neurophysiology raw and processed data,
 behavior video and extracted position, stimuli, etc.
