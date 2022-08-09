@@ -170,12 +170,12 @@
           "required": ["name", "plane_segmentation"],
           "properties": {
             "name":  {"type": "string"},
-            "PlaneSegmentations": {
+            "plane_segmentation": {
               "type": "array",
               "items": {
                 "title": "PlaneSegmentation",
                 "type": "object",
-                "required": ["name", "description"],
+                "required": ["name", "imaging_plane"],
                 "properties": {
                   "name": {"type": "string", "default": "PlaneSegmentation"},
                   "description": {"type": "string", "default": "Segmented ROIs"},
