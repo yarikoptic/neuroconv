@@ -81,7 +81,7 @@ using the :py:meth:`~neuroconv.utils.dict.dict_deep_update` method with your met
 
 .. code-block:: python
 
-    from neuroconv.utils.dict import load_dict_from_file, dict_deep_update
+    from neuroconv.utils import load_dict_from_file, dict_deep_update
 
     metadata_path = "my_lab_metadata.yml"
     metadata_from_yaml = load_dict_from_file(file_path=metadata_path)
