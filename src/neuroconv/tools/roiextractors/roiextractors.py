@@ -266,6 +266,7 @@ def add_two_photon_series(
     imaging: ImagingExtractor,
     nwbfile: NWBFile,
     metadata: dict,
+    imaging_plane_index: int = 0,
     two_photon_series_index: int = 0,
     iterator_type: Optional[str] = "v2",
     iterator_options: Optional[dict] = None,
@@ -299,7 +300,7 @@ def add_two_photon_series(
         return nwbfile
 
     # Add the image plane to nwb
-    nwbfile = add_imaging_plane(nwbfile=nwbfile, metadata=metadata_copy)
+    nwbfile = add_imaging_plane(nwbfile=nwbfile, metadata=metadata_copy, imaging_plane_index=imaging_plane_index)
     imaging_plane_name = two_photon_series_metadata["imaging_plane"]
     imaging_plane = nwbfile.get_imaging_plane(name=imaging_plane_name)
     two_photon_series_metadata.update(imaging_plane=imaging_plane)
@@ -418,6 +419,8 @@ def write_imaging(
     nwbfile_path: OptionalFilePathType = None,
     nwbfile: Optional[NWBFile] = None,
     metadata: Optional[dict] = None,
+    imaging_plane_index: int = 0,
+    two_photon_series_index: int = 0,
     overwrite: bool = False,
     verbose: bool = True,
     iterator_type: Optional[str] = "v2",
@@ -444,6 +447,12 @@ def write_imaging(
         and returned by the function.
     metadata: dict, optional
         Metadata dictionary with information used to create the NWBFile when one does not exist or overwrite=True.
+    imaging_plane_index : int, optional
+        The metadata in the NeuroConv format is a list of the different imaging planes to add.
+        Specificy which element of the list with this parameter, by default 0.
+    two_photon_series_index : int, optional
+        The metadata in the NeuroConv format is a list of the different two photon series to add.
+        Specificy which element of the list with this parameter, by default 0.
     overwrite: bool, optional
         Whether or not to overwrite the NWBFile if one exists at the nwbfile_path.
         The default is False (append mode).
@@ -492,6 +501,8 @@ def write_imaging(
             imaging=imaging,
             nwbfile=nwbfile_out,
             metadata=metadata,
+            imaging_plane_index=imaging_plane_index,
+            two_photon_series_index=two_photon_series_index,
             iterator_type=iterator_type,
             iterator_options=iterator_options,
         )

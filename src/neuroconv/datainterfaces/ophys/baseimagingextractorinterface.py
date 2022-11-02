@@ -77,9 +77,13 @@ class BaseImagingExtractorInterface(BaseExtractorInterface):
         nwbfile_path: OptionalFilePathType = None,
         nwbfile: Optional[NWBFile] = None,
         metadata: Optional[dict] = None,
+        imaging_plane_index: int = 0,
+        two_photon_series_index: int = 0,
         overwrite: bool = False,
         stub_test: bool = False,
         stub_frames: int = 100,
+        iterator_type: Optional[str] = "v2",
+        iterator_options: Optional[dict] = None,
     ):
         from ...tools.roiextractors import write_imaging
 
@@ -94,6 +98,10 @@ class BaseImagingExtractorInterface(BaseExtractorInterface):
             nwbfile_path=nwbfile_path,
             nwbfile=nwbfile,
             metadata=metadata,
+            imaging_plane_index=imaging_plane_index,
+            two_photon_series_index=two_photon_series_index,
             overwrite=overwrite,
             verbose=self.verbose,
+            iterator_type=iterator_type,
+            iterator_options=iterator_options,
         )
