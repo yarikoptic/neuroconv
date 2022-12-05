@@ -1,14 +1,22 @@
 """Authors: Cody Baker."""
 import json
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
-from pynwb.ecephys import ElectricalSeries
+from pynwb import NWBFile, TimeSeries
+from pynwb.device import Device
 
 from .spikeglxdatainterface import SpikeGLXRecordingInterface
 from .read_spikeglx import ExtractDigital
 from .spikeglx_utils import get_session_start_time
-from ....utils import get_schema_from_method_signature, get_schema_from_hdmf_class, FilePathType, dict_deep_update
+from ....utils import (
+    get_schema_from_method_signature,
+    get_schema_from_hdmf_class,
+    FilePathType,
+    OptionalFilePathType,
+    dict_deep_update,
+)
 
 
 class SpikeGLXNIDQInterface(SpikeGLXRecordingInterface):
@@ -51,8 +59,8 @@ class SpikeGLXNIDQInterface(SpikeGLXRecordingInterface):
 
     def get_metadata_schema(self):
         metadata_schema = super().get_metadata_schema()
-        metadata_schema["properties"]["Ecephys"]["properties"].update(
-            ElectricalSeriesRaw=get_schema_from_hdmf_class(ElectricalSeries)
+        metadata_schema["properties"]["Synchronization"]["properties"].update(
+            TimeSeriesNIDQ=get_schema_from_hdmf_class(TimeSeries)
         )
         return metadata_schema
 
@@ -74,38 +82,10 @@ class SpikeGLXNIDQInterface(SpikeGLXRecordingInterface):
                 description=json.dumps(header_metadata),
                 manufacturer="National Instruments",
             )
-            metadata["Ecephys"].get("Device", list()).append(Device=device)
+            metadata["Synchronization"].get("Device", list()).append(Device=device)
 
-        # Add groups metadata
-        group_names = self.recording_extractor.get_property("group_name")
-        if self.recording_extractor.get_property("group_name") is None:
-            electrode_groups = [
-                dict(
-                    name="NIDQChannelGroup",
-                    description="A group representing the NIDQ channels.",
-                    location="unknown",
-                    device=device["name"],
-                )
-            ]
-        else:
-            electrode_groups = [
-                dict(
-                    name=group_name,
-                    description="A group representing the NIDQ channels.",
-                    location="unknown",
-                    device=device["name"],
-                )
-                for group_name in set(group_names)
-            ]
-        metadata["Ecephys"].get("ElectrodeGroup", list()).extend(electrode_groups)
-
-        # Electrodes columns descriptions
-        metadata["Ecephys"]["Electrodes"] = [
-            dict(name="group_name", description="Name of the ElectrodeGroup this electrode is a part of."),
-        ]
-
-        metadata["Ecephys"]["ElectricalSeriesSync"] = dict(
-            name="ElectricalSeriesSync", description="Raw acquisition traces for the synchronization (nidq) data."
+        metadata["Synchronization"]["TimeSeriesRaw"] = dict(
+            name="TimeSeriesSync", description="Raw acquisition traces for the synchronization (NIDQ) data."
         )
         return metadata
 
@@ -134,3 +114,17 @@ class SpikeGLXNIDQInterface(SpikeGLXRecordingInterface):
         conversion_options = super().get_conversion_options()
         conversion_options.update(es_key="ElectricalSeriesSync")
         return conversion_options
+
+    def run_conversion(
+        self,
+        nwbfile_path: OptionalFilePathType = None,
+        nwbfile: Optional[NWBFile] = None,
+        metadata: Optional[dict] = None,
+        overwrite: bool = False,
+        stub_test: bool = False,
+        device_index: str = None,
+        compression_opts: Optional[int] = None,
+        iterator_options: Optional[dict] = None,
+    ):
+        device = Device(metadata["Ecephys"]["Device"][device_index])
+        time_series = TimeSeries(name="", unit="Volts", device=Device(metadata["Ecephys"]["Device"][device_index]))
