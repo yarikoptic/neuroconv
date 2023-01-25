@@ -97,6 +97,8 @@ Text
     CSV <text/csv>
     Excel <text/excel>
 
+.. _common-interface-combinations:
+
 Common interface combinations
 -----------------------------
 

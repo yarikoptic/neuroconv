@@ -1,13 +1,13 @@
 NWBConverter
 ============
 
-In neurophysiology, it is common to use multiple different acquisition or
-preprocessing systems with different proprietary formats in the same session.
-For instance, in a given extracellular electrophysiology experiment, you might
-have raw and processed data. The NWBConverter class streamlines this
-conversion process. This single NWBConversion object is responsible for
-combining those multiple read/write operations. An example of how to define
-a ``NWBConverter`` would be
+It is common to have multiple different acquisition or preprocessing systems
+that produce data in different formats. For instance, you might have an
+extracellular electrophysiology experiment with raw and processed data in different
+formats. The :py:class:`.NWBConverter` class streamlines the process of combining different data
+streams into a single NWB file. Here is an example of a simple class that inherits from
+:py:class:`.NWBConverter` to streamline the conversion of raw and processed
+extracellular electrophysiology data.
 
 .. code-block:: python
 
@@ -27,7 +27,7 @@ a ``NWBConverter`` would be
 attribute that specifies all of the ``DataInterface`` classes used by this
 converter. Then you just need to input ``source_data``, which specifies the
 input data to each ``DataInterface``. The keys to this dictionary must match the
-keys of``data_interface_classes``.
+keys of ``data_interface_classes``.
 
 .. code-block:: python
 
@@ -42,26 +42,31 @@ keys of``data_interface_classes``.
 
     example_nwb_converter = ExampleNWBConverter(source_data)
 
-This creates an ``NWBConverter`` object that can aggregate and distribute across
+This creates an :py:class:`.NWBConverter` object that can aggregate and distribute across
 the data interfaces. To fetch metadata across all of the interfaces and merge
 them together, call::
 
     metadata = converter.get_metadata()
 
-The metadata can then be manually modified with any additional user-input::
+The metadata can then be manually modified::
 
-    metadata["NWBFile"]["session_description"] = "NeuroConv tutorial."
-    metadata["NWBFile"]["experimenter"] = "My name"
-    metadata["Subject"]["subject_id"] = "ID of experimental subject"
+    metadata["NWBFile"]["session_description"] = "Mouse in a maze."
+    metadata["NWBFile"]["experimenter"] = "Last, First"
+    metadata["Subject"].update(
+        subject_id="001",
+        species="Mus musculus",
+        sex="M",
+        age="P30D",
+    )
 
-The final metadata dictionary should follow the form defined by
-``converter.get_metadata_schema()``. Now run the entire conversion with::
+The final metadata dictionary should follow the form defined by the method
+:py:meth:`.NWBConverter.get_metadata_schema`. Now run the entire conversion with
+the method :py:meth:`.NWBConverter.run_conversion`::
 
     converter.run_conversion(metadata=metadata, nwbfile_path="my_nwbfile.nwb")
 
 Though this example was only for two data streams (recording and spike-sorted
 data), it can easily extend to any number of sources, including video of a
 subject, extracted position estimates, stimuli, or any other data source.
-
-The sections below describe source schema and metadata schema in more detail through
-another example for two data streams (ophys and ecephys data).
+See :ref:`common-interface-combinations` for other common examples of
+:py:class:`.NWBConverter` configurations.
