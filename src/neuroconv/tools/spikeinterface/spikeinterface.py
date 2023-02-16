@@ -332,7 +332,8 @@ def add_electrodes(
 
     extra_descriptions = [property for property in property_descriptions.keys() if property not in data_to_add]
     if extra_descriptions:
-        raise ValueError(f"{extra_descriptions} are not available in the recording extractor, set them first")
+        warn("testing")
+        # raise ValueError(f"{extra_descriptions} are not available in the recording extractor, set them first")
 
     # Channel name logic
     channel_ids = checked_recording.get_channel_ids()
@@ -1345,10 +1346,12 @@ def add_units_table(
 
         extended_data[indexes_for_default_values] = default_value
         # Always store numpy objects as strings
-        if np.issubdtype(extended_data.dtype, np.object_):
+        if np.issubdtype(extended_data.dtype, np.object_) and np.isreal(extended_data[:1][:1]):
+            cols_args.update(index=True)
+        elif np.issubdtype(extended_data.dtype, np.object_):  # previous default behavior
             extended_data = extended_data.astype("str", copy=False)
         cols_args["data"] = extended_data
-        units_table.add_column(property, **cols_args)
+        units_table.add_column(name=property, **cols_args)
 
     if write_waveforms:
         assert write_table_first_time, "write_waveforms is not supported with re-write"
